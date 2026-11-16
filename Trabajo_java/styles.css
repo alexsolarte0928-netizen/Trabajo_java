@@ -1,0 +1,111 @@
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f0f2f5;
+    color: #333;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    min-height: 100vh;
+    margin: 0;
+    padding-top: 50px;
+}
+
+.container {
+    background: #ffffff;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+    width: 420px;
+}
+
+h1 {
+    text-align: center;
+    color: #2d3748;
+    margin-bottom: 24px;
+    font-size: 24px;
+}
+
+.todo-form {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 24px;
+}
+
+input, button {
+    padding: 12px;
+    font-size: 15px;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    outline: none;
+    transition: all 0.2s ease;
+}
+
+input:focus {
+    border-color: #3182ce;
+    box-shadow: 0 0 0 3px rgba(49, 130, 206, 0.15);
+}
+
+button {
+    background-color: #3182ce;
+    color: white;
+    border: none;
+    cursor: pointer;
+    font-weight: 600;
+}
+
+button:hover {
+    background-color: #2b6cb0;
+}
+
+/* Estilo para los elementos de la lista cuando aparezcan */
+.todo-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.todo-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 16px;
+    background: #f7fafc;
+    border: 1px solid #edf2f7;
+    border-radius: 8px;
+    transition: background 0.2s;
+}
+
+.todo-item:hover {
+    background: #edf2f7;
+}
+
+.todo-content {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.completed {
+    text-decoration: line-through;
+    color: #a0aec0;
+}
+
+.btn-delete {
+    background-color: #feb2b2;
+    color: #9b2c2c;
+    border: none;
+    padding: 6px 10px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.btn-delete:hover {
+    background-color: #fc8181;
+    color: #fff;
+}

@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mi Agenda y Tareas</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f0f2f5;
+            color: #333;
+            display: flex;
+            justify-content: center;
+            padding: 40px 20px;
+            margin: 0;
+        }
+
+        .main-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 30px;
+            max-width: 500px;
+            width: 100%;
+        }
+
+        .container {
+            background: #ffffff;
+            padding: 25px 30px;
+            border-radius: 12px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        h1 {
+            text-align: center;
+            color: #2d3748;
+            font-size: 22px;
+            margin-bottom: 20px;
+        }
+
+        .todo-form {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        input, button {
+            padding: 11px;
+            font-size: 14px;
+            border: 1px solid #cbd5e0;
+            border-radius: 6px;
+            outline: none;
+        }
+
+        input:focus {
+            border-color: #3182ce;
+            box-shadow: 0 0 0 3px rgba(49, 130, 206, 0.15);
+        }
+
+        button {
+            background-color: #3182ce;
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background 0.2s;
+        }
+
+        button:hover {
+            background-color: #2b6cb0;
+        }
+
+        .todo-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 12px;
+            background: #edf2f7;
+            margin-bottom: 8px;
+            border-radius: 6px;
+        }
+
+        .todo-content {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .completed {
+            text-decoration: line-through;
+            color: #a0aec0;
+        }
+
+        .contact-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 12px;
+            background: #edf2f7;
+            margin-bottom: 8px;
+            border-radius: 6px;
+            border-left: 4px solid #3182ce;
+        }
+
+        .contact-info {
+            display: flex;
+            flex-direction: column;
+            gap: 3px;
+        }
+
+        .contact-name {
+            font-weight: bold;
+            color: #2d3748;
+        }
+
+        .contact-phone {
+            font-size: 13px;
+            color: #718096;
+        }
+
+        .btn-delete {
+            background-color: #e53e3e;
+            color: white;
+            padding: 6px 10px;
+            font-size: 12px;
+            border-radius: 4px;
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn-delete:hover {
+            background-color: #c53030;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="main-wrapper">
+        <!-- SECCIÓN 1: LISTA DE TAREAS -->
+        <div class="container">
+            <h1>Lista de Tareas</h1>
+            
+            <div class="todo-form">
+                <input id="todo-title" type="text" placeholder="¿Qué necesitas hacer?" />
+                <input id="date-picker" type="date" />
+                <button onclick="addTodo()">Añadir Tarea</button>
+            </div>
+
+            <div id="todo-list"></div>
+        </div>
+
+        <!-- SECCIÓN 2: MIS CONTACTOS -->
+        <div class="container">
+            <h1>Mis Contactos</h1>
+            
+            <div class="todo-form">
+                <input id="contact-name" type="text" placeholder="Nombre del contacto" />
+                <input id="contact-phone" type="tel" placeholder="Teléfono" />
+                <button onclick="addContact()">Guardar Contacto</button>
+            </div>
+
+            <div id="contact-list"></div>
+        </div>
+    </div>
+
+    <script>
+        // Lógica de Tareas con LocalStorage
+        let todos = JSON.parse(localStorage.getItem('my_todos')) || [
+            { title: 'Estudiar desarrollo web', dueDate: '2026-11-15', completed: false },
+            { title: 'Practicar bases de datos', dueDate: '2026-11-16', completed: true },
+            { title: 'Hacer ejercicio', dueDate: '2026-11-17', completed: false }
+        ];
+
+        renderTodos();
+
+        function guardarTodos() {
+            localStorage.setItem('my_todos', JSON.stringify(todos));
+        }
+
+        function addTodo() {
+            const textbox = document.getElementById('todo-title');
+            const title = textbox.value.trim();
+            const datePicker = document.getElementById('date-picker');
+            const dueDate = datePicker.value;
+
+            if (title === '') {
+                alert('Por favor escribe una tarea');
+                return;
+            }
+
+            todos.push({ title: title, dueDate: dueDate, completed: false });
+            textbox.value = '';
+            datePicker.value = '';
+            
+            guardarTodos();
+            renderTodos();
+        }
+
+        function toggleTodo(index) {
+            todos[index].completed = !todos[index].completed;
+            guardarTodos();
+            renderTodos();
+        }
+
+        function renderTodos() {
+            const todoList = document.getElementById('todo-list');
+            todoList.innerHTML = '';
+
+            todos.forEach(function (todo, index) {
+                const element = document.createElement('div');
+                element.classList.add('todo-item');
+
+                const contentWrapper = document.createElement('div');
+                contentWrapper.classList.add('todo-content');
+
+                const checkbox = document.createElement('input');
+                checkbox.type = 'checkbox';
+                checkbox.checked = todo.completed;
+                checkbox.onchange = function () { toggleTodo(index); };
+
+                const textSpan = document.createElement('span');
+                textSpan.innerText = `${todo.title} (${todo.dueDate || 'Sin fecha'})`;
+
+                if (todo.completed) {
+                    textSpan.classList.add('completed');
+                }
+
+                contentWrapper.appendChild(checkbox);
+                contentWrapper.appendChild(textSpan);
+                element.appendChild(contentWrapper);
+                todoList.appendChild(element);
+            });
+        }
+
+        // Lógica de Contactos con LocalStorage
+        let contacts = JSON.parse(localStorage.getItem('my_contacts')) || [
+            { name: 'Juan Pérez', phone: '310 456 7890' },
+            { name: 'María Gómez', phone: '320 987 6543' }
+        ];
+
+        renderContacts();
+
+        function guardarContactos() {
+            localStorage.setItem('my_contacts', JSON.stringify(contacts));
+        }
+
+        function addContact() {
+            const nameInput = document.getElementById('contact-name');
+            const phoneInput = document.getElementById('contact-phone');
+            const name = nameInput.value.trim();
+            const phone = phoneInput.value.trim();
+
+            if (name === '' || phone === '') {
+                alert('Por favor ingresa el nombre y el teléfono');
+                return;
+            }
+
+            contacts.push({ name: name, phone: phone });
+            nameInput.value = '';
+            phoneInput.value = '';
+
+            guardarContactos();
+            renderContacts();
+        }
+
+        function deleteContact(index) {
+            contacts.splice(index, 1);
+            guardarContactos();
+            renderContacts();
+        }
+
+        function renderContacts() {
+            const contactList = document.getElementById('contact-list');
+            contactList.innerHTML = '';
+
+            contacts.forEach(function (contact, index) {
+                const element = document.createElement('div');
+                element.classList.add('contact-item');
+
+                const infoWrapper = document.createElement('div');
+                infoWrapper.classList.add('contact-info');
+
+                const nameSpan = document.createElement('span');
+                nameSpan.classList.add('contact-name');
+                nameSpan.innerText = contact.name;
+
+                const phoneSpan = document.createElement('span');
+                phoneSpan.classList.add('contact-phone');
+                phoneSpan.innerText = contact.phone;
+
+                const deleteBtn = document.createElement('button');
+                deleteBtn.classList.add('btn-delete');
+                deleteBtn.innerText = 'Eliminar';
+                deleteBtn.onclick = function () { deleteContact(index); };
+
+                infoWrapper.appendChild(nameSpan);
+                infoWrapper.appendChild(phoneSpan);
+                element.appendChild(infoWrapper);
+                element.appendChild(deleteBtn);
+
+                contactList.appendChild(element);
+            });
+        }
+    </script>
+</body>
+</html>
+
