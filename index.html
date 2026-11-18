@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestión de Contactos</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+ 
+    <div class="container">
+        <h1>Mis Contactos</h1>
+       
+        <div class="contact-form">
+            <input id="contact-name" type="text" placeholder="Nombre del contacto" />
+            <input id="contact-phone" type="tel" placeholder="Teléfono" />
+           
+            <div class="form-actions">
+                <button id="submit-btn" onclick="saveContact()">Guardar Contacto</button>
+                <button id="cancel-btn" onclick="cancelEdit()">Cancelar</button>
+            </div>
+        </div>
+ 
+        <div id="contact-list"></div>
+    </div>
+ 
+    <script src="script.js"></script>
+</body>
+</html>
+ 
